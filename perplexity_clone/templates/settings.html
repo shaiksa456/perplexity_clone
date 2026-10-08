@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — Ask</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app">
+  {% include "rail-partial.html" %}
+
+  <main class="stage">
+    {% include "topbar-partial.html" %}
+
+    <div class="panel-page">
+      <h1 class="panel-title">Settings</h1>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="auth-flash">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <section class="panel-card">
+        <h2 class="panel-card-title">Appearance</h2>
+        <form class="panel-form" method="POST" action="{{ url_for('settings') }}">
+          <label class="auth-label">Theme</label>
+          <div class="theme-options">
+            <label class="theme-option">
+              <input type="radio" name="theme" value="dark" {% if user.theme != 'light' %}checked{% endif %}>
+              <span>Dark</span>
+            </label>
+            <label class="theme-option">
+              <input type="radio" name="theme" value="light" {% if user.theme == 'light' %}checked{% endif %}>
+              <span>Light</span>
+            </label>
+          </div>
+          <button class="auth-submit auth-submit--inline" type="submit">Save settings</button>
+        </form>
+      </section>
+
+      <section class="panel-card panel-card--danger">
+        <h2 class="panel-card-title">Delete account</h2>
+        <p class="panel-meta">This permanently deletes your account and all of your search history. This cannot be undone.</p>
+        <form class="panel-form" method="POST" action="{{ url_for('delete_account') }}" onsubmit="return confirm('Delete your account permanently? This cannot be undone.');">
+          <label class="auth-label" for="delete_password">Confirm password</label>
+          <input class="auth-input" type="password" id="delete_password" name="password" required>
+          <button class="auth-submit auth-submit--danger" type="submit">Delete my account</button>
+        </form>
+      </section>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

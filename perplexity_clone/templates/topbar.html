@@ -1,0 +1,54 @@
+@'
+<header class="topbar">
+  <div class="topbar-spacer"></div>
+  <div class="topbar-actions">
+    <a class="topbar-btn" href="{{ url_for('history_page') }}" title="History" id="historyBtn">
+      <span class="topbar-btn-icon">&#8635;</span>
+      <span class="topbar-btn-label">History</span>
+    </a>
+    <a class="topbar-btn" href="{{ url_for('settings') }}" title="Settings" id="settingsBtn">
+      <span class="topbar-btn-icon">&#9881;</span>
+      <span class="topbar-btn-label">Settings</span>
+    </a>
+
+    {% if current_user %}
+    <div class="profile-menu" id="profileMenu">
+      <button class="topbar-btn profile-btn" type="button" id="profileBtn" title="Profile" aria-haspopup="true" aria-expanded="false">
+        <span class="profile-avatar">{{ current_user.username[0]|upper }}</span>
+        <span class="topbar-btn-label">{{ current_user.username }}</span>
+      </button>
+      <div class="profile-dropdown" id="profileDropdown" hidden>
+        <div class="profile-dropdown-header">
+          <div class="profile-dropdown-name">{{ current_user.username }}</div>
+          <div class="profile-dropdown-email">{{ current_user.email }}</div>
+        </div>
+        <a class="profile-dropdown-item" href="{{ url_for('profile') }}">View profile</a>
+        <a class="profile-dropdown-item" href="{{ url_for('settings') }}">Settings</a>
+        <a class="profile-dropdown-item" href="{{ url_for('history_page') }}">History</a>
+        <a class="profile-dropdown-item profile-dropdown-item--danger" href="{{ url_for('logout') }}">Log out</a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</header>
+<script>
+(() => {
+  const menu = document.getElementById("profileMenu");
+  if (!menu) return;
+  const btn = document.getElementById("profileBtn");
+  const dropdown = document.getElementById("profileDropdown");
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isHidden = dropdown.hidden;
+    dropdown.hidden = !isHidden;
+    btn.setAttribute("aria-expanded", String(isHidden));
+  });
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target)) {
+      dropdown.hidden = true;
+      btn.setAttribute("aria-expanded", "false");
+    }
+  });
+})();
+</script>
+'@ | Set-Content -Path "templates\topbar-partial.html" -Encoding utf8

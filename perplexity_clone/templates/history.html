@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History — Ask</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app">
+  {% include "rail-partial.html" %}
+
+  <main class="stage">
+    {% include "topbar-partial.html" %}
+
+    <div class="panel-page">
+      <h1 class="panel-title">Search history</h1>
+
+      {% if threads %}
+        <div class="history-list">
+          {% for t in threads %}
+            <a class="history-row" href="{{ url_for('index') }}?thread={{ t.id }}">
+              <div class="history-row-main">
+                <span class="history-row-title">{{ t.title }}</span>
+                <span class="history-row-meta">{{ t.message_count }} question{{ 's' if t.message_count != 1 else '' }} &middot; updated {{ t.updated_at[:16].replace('T', ' ') }}</span>
+              </div>
+              <span class="history-row-arrow">&#8594;</span>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="panel-meta">No searches yet. <a href="{{ url_for('index') }}">Ask your first question</a>.</p>
+      {% endif %}
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

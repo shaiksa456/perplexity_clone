@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create account — Ask</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-body">
+
+<div class="auth-shell">
+  <div class="auth-brand">
+    <span class="brand-mark">&#9670;</span>
+    <span class="brand-word">Ask</span>
+  </div>
+
+  <div class="auth-card">
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-subtitle">Get grounded, cited answers — free to start.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="auth-flash">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form class="auth-form" method="POST" action="{{ url_for('register') }}" autocomplete="off">
+      <label class="auth-label" for="username">Username</label>
+      <input class="auth-input" type="text" id="username" name="username" value="{{ username or '' }}" minlength="3" required autofocus>
+
+      <label class="auth-label" for="email">Email</label>
+      <input class="auth-input" type="email" id="email" name="email" value="{{ email or '' }}" required>
+
+      <label class="auth-label" for="password">Password</label>
+      <input class="auth-input" type="password" id="password" name="password" minlength="8" required>
+
+      <label class="auth-label" for="confirm_password">Confirm password</label>
+      <input class="auth-input" type="password" id="confirm_password" name="confirm_password" minlength="8" required>
+
+      <button class="auth-submit" type="submit">Create account</button>
+    </form>
+
+    <p class="auth-footnote">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — Ask</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-body">
+
+<div class="auth-shell">
+  <div class="auth-brand">
+    <span class="brand-mark">&#9670;</span>
+    <span class="brand-word">Ask</span>
+  </div>
+
+  <div class="auth-card">
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Log in to continue your research.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="auth-flash">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form class="auth-form" method="POST" action="{{ url_for('login') }}" autocomplete="off">
+      <input type="hidden" name="next" value="{{ next or '' }}">
+      <label class="auth-label" for="identifier">Username or email</label>
+      <input class="auth-input" type="text" id="identifier" name="identifier" value="{{ identifier or '' }}" required autofocus>
+
+      <label class="auth-label" for="password">Password</label>
+      <input class="auth-input" type="password" id="password" name="password" required>
+
+      <button class="auth-submit" type="submit">Log in</button>
+    </form>
+
+    <p class="auth-footnote">Don't have an account? <a href="{{ url_for('register') }}">Create one</a></p>
+  </div>
+</div>
+
+</body>
+</html>

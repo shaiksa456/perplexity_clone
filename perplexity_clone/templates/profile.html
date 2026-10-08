@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — Ask</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app">
+  {% include "rail-partial.html" %}
+
+  <main class="stage">
+    {% include "topbar-partial.html" %}
+
+    <div class="panel-page">
+      <h1 class="panel-title">Your profile</h1>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="auth-flash">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <section class="panel-card">
+        <h2 class="panel-card-title">Account details</h2>
+        <form class="panel-form" method="POST" action="{{ url_for('profile') }}">
+          <label class="auth-label" for="username">Username</label>
+          <input class="auth-input" type="text" id="username" name="username" value="{{ user.username }}" minlength="3" required>
+
+          <label class="auth-label" for="email">Email</label>
+          <input class="auth-input" type="email" id="email" name="email" value="{{ user.email }}" required>
+
+          <button class="auth-submit auth-submit--inline" type="submit">Save changes</button>
+        </form>
+        <p class="panel-meta">Member since {{ user.created_at[:10] }}</p>
+      </section>
+
+      <section class="panel-card">
+        <h2 class="panel-card-title">Change password</h2>
+        <form class="panel-form" method="POST" action="{{ url_for('change_password') }}">
+          <label class="auth-label" for="current_password">Current password</label>
+          <input class="auth-input" type="password" id="current_password" name="current_password" required>
+
+          <label class="auth-label" for="new_password">New password</label>
+          <input class="auth-input" type="password" id="new_password" name="new_password" minlength="8" required>
+
+          <label class="auth-label" for="confirm_new_password">Confirm new password</label>
+          <input class="auth-input" type="password" id="confirm_new_password" name="confirm_new_password" minlength="8" required>
+
+          <button class="auth-submit auth-submit--inline" type="submit">Update password</button>
+        </form>
+      </section>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

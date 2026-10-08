@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask — an open research assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  {% include "rail-partial.html" %}
+
+  <main class="stage">
+    {% include "topbar-partial.html" %}
+
+    <section class="hero" id="hero">
+      <p class="hero-eyebrow">an open research assistant</p>
+      <h1 class="hero-title">Ask anything.<br>Get an answer, not a list of links.</h1>
+      <form class="ask-form ask-form--hero" id="askFormHero" autocomplete="off">
+        <input
+          type="text"
+          name="question"
+          id="questionInputHero"
+          placeholder="Ask a question…"
+          autofocus
+        />
+        <button type="submit" aria-label="Search">&#8594;</button>
+      </form>
+      <div class="hero-examples">
+        <button class="example-chip" data-q="What causes the northern lights?">What causes the northern lights?</button>
+        <button class="example-chip" data-q="Compare Rust and Go for backend services">Rust vs Go for backends</button>
+        <button class="example-chip" data-q="What's the latest on fusion energy progress?">Latest on fusion energy</button>
+      </div>
+    </section>
+
+    <section class="thread" id="thread" hidden></section>
+
+    <form class="ask-form ask-form--dock" id="askFormDock" autocomplete="off" hidden>
+      <input type="text" name="question" id="questionInputDock" placeholder="Ask a follow-up…" />
+      <button type="submit" aria-label="Search">&#8594;</button>
+    </form>
+
+  </main>
+</div>
+
+<template id="turnTemplate">
+  <article class="turn">
+    <h2 class="turn-question"></h2>
+
+    <div class="sources-strip"></div>
+
+    <div class="answer-block">
+      <div class="answer-markdown"></div>
+    </div>
+
+    <div class="followups"></div>
+  </article>
+</template>
+
+<template id="sourceCardTemplate">
+  <a class="source-card" target="_blank" rel="noopener">
+    <span class="source-index"></span>
+    <span class="source-title"></span>
+    <span class="source-domain"></span>
+  </a>
+</template>
+
+<script>
+  window.__INITIAL_THREAD_ID__ = {{ (request.args.get('thread') | tojson) if request.args.get('thread') else 'null' }};
+</script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
